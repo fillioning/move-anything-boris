@@ -54,7 +54,8 @@ scp -r granular root@move.local:/data/UserData/move-anything/modules/audio_fx/
 
 ## Credits
 
-DSP: Boris | Move port: charlesvestal
+Based on [Boris Granular Station](https://github.com/glesdora/boris-granular-station) by Alessandro Gaiba ([@glesdora](https://github.com/glesdora)).
+Ported to Ableton Move by [charlesvestal](https://github.com/charlesvestal).
 
 ## License
 
