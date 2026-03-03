@@ -1,0 +1,91 @@
+{
+  "title": "Boris Granular",
+  "children": [
+    {
+      "title": "Overview",
+      "lines": [
+        "Real-time granular",
+        "audio effect.",
+        "",
+        "Captures live audio",
+        "into a buffer, then",
+        "spawns overlapping",
+        "grains with pitch,",
+        "position, and pan",
+        "randomization."
+      ]
+    },
+    {
+      "title": "Main Knobs",
+      "lines": [
+        "Knob 1: Size",
+        " Grain length 20-2000ms",
+        "",
+        "Knob 2: Position",
+        " Read position in buffer",
+        "",
+        "Knob 3: Pitch",
+        " Playback speed 0.25-4x",
+        "",
+        "Knob 4: Density",
+        " Grain trigger rate",
+        "",
+        "Knob 5: Drift",
+        " Random position offset",
+        "",
+        "Knob 6: Feedback",
+        " Output fed back to input",
+        "",
+        "Knob 7: Wet",
+        " Wet signal level",
+        "",
+        "Knob 8: Freeze",
+        " Stop recording to buffer"
+      ]
+    },
+    {
+      "title": "Randomization",
+      "lines": [
+        "Chance: trigger prob",
+        "Rnd Delay: trigger jitter",
+        "Rnd Length: grain size var",
+        "Rnd Pitch: pitch variation",
+        "Reverse: reverse prob",
+        "Pan Width: stereo spread",
+        "Rnd Volume: level variation"
+      ]
+    },
+    {
+      "title": "Sync & Advanced",
+      "lines": [
+        "Sync: lock to MIDI clock",
+        "Division: tempo division",
+        "Rhythm: normal/dot/trip",
+        "",
+        "Envelope: grain shape",
+        " hann/triangle/trapezoid",
+        "Gain: input level",
+        "Dry: dry signal level",
+        "Voices: 1-24 max grains"
+      ]
+    },
+    {
+      "title": "Tips",
+      "lines": [
+        "Start with Density ~0.5",
+        "and Size ~200ms.",
+        "",
+        "Add Drift for texture.",
+        "Reverse for ambience.",
+        "Feedback for buildup.",
+        "",
+        "Freeze captures a",
+        "moment to granulate",
+        "indefinitely.",
+        "",
+        "Sync locks triggers",
+        "to MIDI clock tempo."
+      ]
+    }
+  ]
+}
