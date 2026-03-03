@@ -12,7 +12,7 @@
     "chainable": true,
     "component_type": "audio_fx",
     "ui_hierarchy": {
-      "modes": ["Granular", "Randomize"],
+      "modes": ["Granular", "Randomize", "sync", "advanced"],
       "levels": {
         "Granular": {
           "label": "Granular",
