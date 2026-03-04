@@ -68,5 +68,3 @@ Ported to Ableton Move by [charlesvestal](https://github.com/charlesvestal).
 GPL-3.0 — see [LICENSE](LICENSE)
 
 This project is a derivative of Boris Granular Station, which is licensed under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html). As required by GPL-3.0, this derivative work is distributed under the same license.
-
-The compiled binary (`granular.so`) was ported by charlesvestal. The corresponding source code (`granular.c`) is not yet included in this repository. If you need the source code, please open an issue.
