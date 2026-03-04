@@ -5,14 +5,14 @@
   "version": "0.5.0",
   "description": "Real-time granular FX with live input capture",
   "author": "Boris (port: charlesvestal)",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "dsp": "granular.so",
   "api_version": 2,
   "capabilities": {
     "chainable": true,
     "component_type": "audio_fx",
     "ui_hierarchy": {
-      "modes": ["Granular", "Randomize", "sync", "advanced"],
+      "modes": ["Granular", "Randomize", "Sync", "Advanced"],
       "levels": {
         "Granular": {
           "label": "Granular",
@@ -195,7 +195,7 @@
             "feedback"
           ]
         },
-        "sync": {
+        "Sync": {
           "label": "Sync",
           "params": [
             {
@@ -226,7 +226,7 @@
             "rhythm"
           ]
         },
-        "advanced": {
+        "Advanced": {
           "label": "Advanced",
           "params": [
             {
