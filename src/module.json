@@ -14,6 +14,86 @@
     "ui_hierarchy": {
       "modes": ["Granular", "Randomize", "Sync", "Advanced"],
       "levels": {
+        "root": {
+          "label": "Boris Granular",
+          "params": [
+            {
+              "key": "density",
+              "label": "Density",
+              "type": "float",
+              "min": 0.04,
+              "max": 1.0,
+              "default": 0.52,
+              "step": 0.01
+            },
+            {
+              "key": "grain_size",
+              "label": "Size",
+              "type": "float",
+              "min": 20.0,
+              "max": 2000.0,
+              "default": 200.0,
+              "step": 1,
+              "unit": "ms"
+            },
+            {
+              "key": "position",
+              "label": "Position",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.0,
+              "step": 0.01
+            },
+            {
+              "key": "pitch",
+              "label": "Pitch Shift",
+              "type": "float",
+              "min": 0.25,
+              "max": 4.0,
+              "default": 1.0,
+              "step": 0.01
+            },
+            {
+              "key": "feedback",
+              "label": "Feedback",
+              "type": "float",
+              "min": 0.0,
+              "max": 90.0,
+              "default": 0.0,
+              "step": 1,
+              "unit": "%"
+            },
+            {
+              "key": "wet",
+              "label": "Wet",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.5,
+              "default": 1.0,
+              "step": 0.01
+            },
+            {
+              "key": "pan_width",
+              "label": "Pan Width",
+              "type": "float",
+              "min": 0.0,
+              "max": 100.0,
+              "default": 0.0,
+              "step": 1,
+              "unit": "%"
+            }
+          ],
+          "knobs": [
+            "density",
+            "grain_size",
+            "position",
+            "pitch",
+            "feedback",
+            "wet",
+            "pan_width"
+          ]
+        },
         "Granular": {
           "label": "Granular",
           "params": [
