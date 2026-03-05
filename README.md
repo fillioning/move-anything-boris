@@ -2,7 +2,7 @@
 
 Real-time granular audio effect for [Ableton Move](https://www.ableton.com/move/), built for the [move-anything](https://github.com/charlesvestal/move-anything) framework.
 
-Captures live audio into a buffer, then spawns overlapping grains with pitch, position, and pan randomization.
+Captures live audio into a 10-second circular buffer, then spawns overlapping grains with per-grain randomization of position, pitch, direction, volume, and panning. Creates textures ranging from subtle time-stretching to abstract soundscapes.
 
 ## Parameters
 
@@ -36,12 +36,20 @@ Sync | Division (1/16 to 4/1) | Rhythm (normal / dotted / triplet)
 ### Advanced
 Input gain | Dry level | Mute | Voices (1-24)
 
+## Building
+
+```bash
+./scripts/build.sh
+```
+
+Requires Docker or an `aarch64-linux-gnu-gcc` cross-compiler.
+
 ## Installation
 
-Copy the `granular` folder to your Move:
+Copy the built module to your Move:
 
 ```
-scp -r granular root@move.local:/data/UserData/move-anything/modules/audio_fx/
+scp -r dist/granular root@move.local:/data/UserData/move-anything/modules/audio_fx/
 ```
 
 ## Tips
