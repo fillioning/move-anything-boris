@@ -976,11 +976,22 @@ static int v2_get_param(void *instance, const char *key, char *buf, int buf_len)
             inst->voice_count, inst->detected_bpm);
     }
 
-    /* UI hierarchy — modes for page navigation, first mode has default knobs */
+    /* UI hierarchy — flat root with sub-levels (like HeatAir/Cloudseed) */
     if (strcmp(key, "ui_hierarchy") == 0) {
         const char *h = "{"
-            "\"modes\":[\"Granular\",\"Randomize\",\"Sync\",\"Advanced\"],"
+            "\"modes\":null,"
             "\"levels\":{"
+                "\"root\":{"
+                    "\"name\":\"Boris Granular\","
+                    "\"knobs\":[\"density\",\"grain_size\",\"position\",\"pitch\","
+                        "\"feedback\",\"wet\",\"pan_width\",\"freeze\"],"
+                    "\"params\":["
+                        "{\"level\":\"Granular\",\"label\":\"Granular\"},"
+                        "{\"level\":\"Randomize\",\"label\":\"Randomize\"},"
+                        "{\"level\":\"Sync\",\"label\":\"Sync\"},"
+                        "{\"level\":\"Advanced\",\"label\":\"Advanced\"}"
+                    "]"
+                "},"
                 "\"Granular\":{"
                     "\"label\":\"Granular\","
                     "\"knobs\":[\"density\",\"grain_size\",\"position\",\"pitch\","
