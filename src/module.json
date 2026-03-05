@@ -82,6 +82,13 @@
               "default": 0.0,
               "step": 1,
               "unit": "%"
+            },
+            {
+              "key": "freeze",
+              "label": "Freeze",
+              "type": "enum",
+              "options": ["off", "on"],
+              "default": 0
             }
           ],
           "knobs": [
@@ -91,7 +98,8 @@
             "pitch",
             "feedback",
             "wet",
-            "pan_width"
+            "pan_width",
+            "freeze"
           ]
         },
         "Granular": {
