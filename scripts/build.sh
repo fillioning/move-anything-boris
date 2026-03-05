@@ -54,9 +54,9 @@ ${CROSS_PREFIX}gcc -Ofast -shared -fPIC \
     -march=armv8-a -mtune=cortex-a72 \
     -fomit-frame-pointer -fno-stack-protector \
     -DNDEBUG \
-    src/granular.c \
+    src/dsp/granular.c \
     -o build/granular.so \
-    -Isrc \
+    -Isrc/dsp \
     -lm
 
 # Copy files to dist (use cat to avoid ExtFS deallocation issues with Docker)
