@@ -12,6 +12,6 @@ fi
 
 ssh root@move.local "mkdir -p /data/UserData/move-anything/modules/audio_fx/granular"
 scp -r dist/granular/* root@move.local:/data/UserData/move-anything/modules/audio_fx/granular/
-ssh root@move.local "chmod -R a+rw /data/UserData/move-anything/modules/audio_fx/granular"
+ssh root@move.local "chown -R ableton:users /data/UserData/move-anything/modules/audio_fx/granular"
 
 echo "Installed to Move. Restart MoveOriginal to load the module."

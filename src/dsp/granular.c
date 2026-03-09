@@ -271,7 +271,67 @@ typedef struct {
     int division;         /* 0-6 */
     int rhythm;           /* 0=normal, 1=dotted, 2=triplet */
     int voice_count;      /* 1-24 */
+    int current_page;     /* 0=Granular, 1=Randomize, 2=Sync, 3=Advanced */
 } granular_instance_t;
+
+/* ============================================================================
+ * KNOB DISPLAY - Maps knob positions to param keys and display names per page
+ * ============================================================================ */
+
+typedef struct {
+    const char *key;
+    const char *label;
+} knob_map_entry_t;
+
+/* Knobs per page (up to 8 knobs per page) */
+static const knob_map_entry_t page_knobs[4][8] = {
+    /* Page 0: Granular */
+    {
+        {"density",    "Density"},
+        {"grain_size", "Size"},
+        {"position",   "Position"},
+        {"pitch",      "Pitch Shift"},
+        {"feedback",   "Feedback"},
+        {"wet",        "Wet"},
+        {"pan_width",  "Pan Width"},
+        {"freeze",     "Freeze"}
+    },
+    /* Page 1: Randomize */
+    {
+        {"random_length", "Rdm Size"},
+        {"random_delay",  "Rdm Delay"},
+        {"random_pitch",  "Rdm Shift"},
+        {"reverse_prob",  "Reverse"},
+        {"random_vol",    "Rdm Vol"},
+        {"chance",        "Chance"},
+        {NULL, NULL},
+        {NULL, NULL}
+    },
+    /* Page 2: Sync */
+    {
+        {"sync",     "Sync"},
+        {"division", "Division"},
+        {"rhythm",   "Rhythm"},
+        {NULL, NULL},
+        {NULL, NULL},
+        {NULL, NULL},
+        {NULL, NULL},
+        {NULL, NULL}
+    },
+    /* Page 3: Advanced */
+    {
+        {"gain",        "Input"},
+        {"dry",         "Dry"},
+        {"mute",        "Mute"},
+        {"voice_count", "Voices"},
+        {NULL, NULL},
+        {NULL, NULL},
+        {NULL, NULL},
+        {NULL, NULL}
+    }
+};
+
+static const int page_knob_count[4] = {8, 6, 3, 4};
 
 /* ============================================================================
  * SHARED STATE
@@ -821,6 +881,19 @@ static void v2_set_param(void *instance, const char *key, const char *val) {
     granular_instance_t *inst = (granular_instance_t *)instance;
     if (!inst) return;
 
+    /* Page navigation from UI */
+    if (strcmp(key, "_level") == 0 || strcmp(key, "level") == 0) {
+        if (strcmp(val, "Granular") == 0 || strcmp(val, "root") == 0)
+            inst->current_page = 0;
+        else if (strcmp(val, "Randomize") == 0)
+            inst->current_page = 1;
+        else if (strcmp(val, "Sync") == 0)
+            inst->current_page = 2;
+        else if (strcmp(val, "Advanced") == 0)
+            inst->current_page = 3;
+        return;
+    }
+
     /* State restore from patch save */
     if (strcmp(key, "state") == 0) {
         float fv;
@@ -955,6 +1028,32 @@ static int v2_get_param(void *instance, const char *key, char *buf, int buf_len)
         return snprintf(buf, buf_len, "%d", inst->detected_bpm);
     if (strcmp(key, "name") == 0)
         return snprintf(buf, buf_len, "Boris Granular");
+
+    /* Knob display name: knob_N_name (1-indexed) */
+    if (strncmp(key, "knob_", 5) == 0 && strstr(key, "_name")) {
+        int knob_num = atoi(key + 5);
+        if (knob_num >= 1 && knob_num <= 8) {
+            int idx = knob_num - 1;
+            int page = inst->current_page;
+            if (idx < page_knob_count[page] && page_knobs[page][idx].label) {
+                return snprintf(buf, buf_len, "%s", page_knobs[page][idx].label);
+            }
+        }
+        return -1;
+    }
+
+    /* Knob display value: knob_N_value (1-indexed) */
+    if (strncmp(key, "knob_", 5) == 0 && strstr(key, "_value")) {
+        int knob_num = atoi(key + 5);
+        if (knob_num >= 1 && knob_num <= 8) {
+            int idx = knob_num - 1;
+            int page = inst->current_page;
+            if (idx < page_knob_count[page] && page_knobs[page][idx].key) {
+                return v2_get_param(instance, page_knobs[page][idx].key, buf, buf_len);
+            }
+        }
+        return -1;
+    }
 
     /* State save */
     if (strcmp(key, "state") == 0) {
@@ -1112,6 +1211,7 @@ static void* v2_create_instance(const char *module_dir, const char *config_json)
     inst->rhythm        = 0;
     inst->voice_count   = MAX_VOICES;
     inst->detected_bpm  = 120;
+    inst->current_page  = 0;
 
     /* Initialize smoothed values */
     sv_init(&inst->sm_grain_size, inst->grain_size);
