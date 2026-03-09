@@ -1027,7 +1027,7 @@ static int v2_get_param(void *instance, const char *key, char *buf, int buf_len)
     if (strcmp(key, "bpm") == 0)
         return snprintf(buf, buf_len, "%d", inst->detected_bpm);
     if (strcmp(key, "name") == 0)
-        return snprintf(buf, buf_len, "Boris Granular");
+        return snprintf(buf, buf_len, "Boris");
 
     /* Knob display name: knob_N_name (1-indexed) */
     if (strncmp(key, "knob_", 5) == 0 && strstr(key, "_name")) {
