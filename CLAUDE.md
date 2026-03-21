@@ -1,4 +1,4 @@
-# Boris Granular - Move Anything Audio FX Module
+# Boris Granular - Schwung Audio FX Module
 
 Port of [Boris Granular Station](https://github.com/glesdora/boris-granular-station) by Alessandro Gaiba for Ableton Move.
 

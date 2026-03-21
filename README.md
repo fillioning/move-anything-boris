@@ -49,7 +49,7 @@ Requires Docker or an `aarch64-linux-gnu-gcc` cross-compiler.
 Copy the built module to your Move:
 
 ```
-scp -r dist/granular root@move.local:/data/UserData/move-anything/modules/audio_fx/
+scp -r dist/granular root@move.local:/data/UserData/schwung/modules/audio_fx/
 ```
 
 ## Tips

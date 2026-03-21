@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build Boris Granular module for Move Anything (ARM64)
+# Build Boris Granular module for Schwung (ARM64)
 #
 # Automatically uses Docker for cross-compilation if needed.
 # Set CROSS_PREFIX to skip Docker (e.g., for native ARM builds).
