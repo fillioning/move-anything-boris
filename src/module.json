@@ -2,7 +2,7 @@
   "id": "granular",
   "name": "Boris Granular",
   "abbrev": "GRAN",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Real-time granular FX with live input capture",
   "author": "Boris (port: charlesvestal)",
   "license": "GPL-3.0",
