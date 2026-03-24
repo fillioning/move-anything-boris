@@ -1,6 +1,6 @@
 # Boris Granular
 
-Real-time granular audio effect for [Ableton Move](https://www.ableton.com/move/), built for the [Schwung]((https://github.com/charlesvestal/schwung)) framework.
+Real-time granular audio effect for [Ableton Move](https://www.ableton.com/move/), built for the [Schwung](https://github.com/charlesvestal/schwung) framework.
 
 Captures live audio into a 10-second circular buffer, then spawns overlapping grains with per-grain randomization of position, pitch, direction, volume, and panning. Creates textures ranging from subtle time-stretching to abstract soundscapes.
 
