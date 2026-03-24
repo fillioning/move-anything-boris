@@ -11,12 +11,12 @@ Captures live audio into a 10-second circular buffer, then spawns overlapping gr
 |------|-----------|-------|
 | 1 | Density | 0.04 - 1.0 |
 | 2 | Size | 20 - 2000 ms |
-| 3 | Pitch Shift | 0.25x - 4x |
-| 4 | Envelope | 0 - 100% |
-| 5 | Position | 0 - 100% |
-| 6 | Drift | 0 - 100% |
-| 7 | Wet | 0 - 150% |
-| 8 | Freeze | off / on |
+| 3 | Position | 0 - 100% |
+| 4 | Pitch Shift | 0.25x - 4x |
+| 5 | Feedback | 0 - 90% |
+| 6 | Pan Width | 0 - 100% |
+| 7 | Freeze | off / on |
+| 8 | Dry/Wet | 0 - 100% |
 
 ### Randomize
 | Knob | Parameter | Range |
@@ -25,16 +25,14 @@ Captures live audio into a 10-second circular buffer, then spawns overlapping gr
 | 2 | Rdm Delay | 0 - 100% |
 | 3 | Rdm Shift | 0 - 100% |
 | 4 | Reverse | 0 - 100% |
-| 5 | Pan Width | 0 - 100% |
-| 6 | Rdm Vol | 0 - 100% |
-| 7 | Chance | 0 - 100% |
-| 8 | Feedback | 0 - 90% |
+| 5 | Rdm Vol | 0 - 100% |
+| 6 | Chance | 0 - 100% |
 
 ### Sync
 Sync | Division (1/16 to 4/1) | Rhythm (normal / dotted / triplet)
 
 ### Advanced
-Input gain | Dry level | Mute | Voices (1-24)
+Input gain | Mute | Voices (1-24)
 
 ## Building
 
@@ -49,7 +47,7 @@ Requires Docker or an `aarch64-linux-gnu-gcc` cross-compiler.
 Copy the built module to your Move:
 
 ```
-scp -r dist/granular root@move.local:/data/UserData/move-anything/modules/audio_fx/
+scp -r dist/granular root@move.local:/data/UserData/schwung/modules/audio_fx/
 ```
 
 ## Tips
@@ -67,7 +65,7 @@ Ported to Ableton Move by [Vincent Fillion](https://github.com/fillioning).
 
 ### Changes from original
 
-- Rewritten from C++/JUCE/RNBO to plain C targeting the move-anything `audio_fx_api_v2` plugin API
+- Rewritten from C++/JUCE/RNBO to plain C targeting the Schwung `audio_fx_api_v2` plugin API
 - Compiled for ARM64 (Ableton Move / Raspberry Pi 4)
 - UI adapted to Move's 8-knob interface across 4 pages (Granular, Randomize, Sync, Advanced)
 
