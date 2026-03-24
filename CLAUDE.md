@@ -25,7 +25,7 @@ Stereo In -> Mono Sum -> Input Gain -> Mix with Feedback
 -> Dry/Wet Mix -> Soft Clip -> Stereo Out
 ```
 
-### Parameters (23 total, 4 pages)
+### Parameters (22 total, 4 pages)
 
 | Page | Key | Type | Range | Default | Description |
 |------|-----|------|-------|---------|-------------|
@@ -35,7 +35,7 @@ Stereo In -> Mono Sum -> Input Gain -> Mix with Feedback
 | Granular | envelope | float | 0-1 | 0 | Window shape (Hann->Tri->Trap) |
 | Granular | position | float | 0-1 | 0 | Read position in buffer |
 | Granular | drift | float | 0-1 | 0 | Position randomization (quadratic) |
-| Granular | wet | float | 0-1.5 | 1.0 | Wet level |
+| Granular | mix | float | 0-100 | 50 | Dry/Wet crossfade % |
 | Granular | freeze | enum | off/on | off | Stop buffer recording |
 | Randomize | random_length | float | 0-100 | 0 | Grain size randomization % |
 | Randomize | random_delay | float | 0-100 | 0 | Trigger delay randomization % |
@@ -49,7 +49,6 @@ Stereo In -> Mono Sum -> Input Gain -> Mix with Feedback
 | Sync | division | enum | 1/16-4/1 | 1/2 | Musical division |
 | Sync | rhythm | enum | normal/dotted/triplet | normal | Rhythm modifier |
 | Advanced | gain | float | 0-1.5 | 1.0 | Input gain |
-| Advanced | dry | float | 0-1.5 | 1.0 | Dry level |
 | Advanced | mute | enum | off/on | off | Mute grain output |
 | Advanced | voice_count | int | 1-24 | 24 | Max simultaneous grains |
 

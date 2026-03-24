@@ -242,8 +242,7 @@ typedef struct {
     SmoothedValue sm_density;
     SmoothedValue sm_drift;
     SmoothedValue sm_feedback;
-    SmoothedValue sm_wet;
-    SmoothedValue sm_dry;
+    SmoothedValue sm_mix;
     SmoothedValue sm_gain;
     SmoothedValue sm_envelope;
 
@@ -254,8 +253,7 @@ typedef struct {
     float density;        /* 0.04-1.0 */
     float drift;          /* 0-1 */
     float feedback;       /* 0-90 (percent) */
-    float wet;            /* 0-1.5 */
-    float dry;            /* 0-1.5 */
+    float mix;            /* 0-100 (dry/wet percent) */
     float gain;           /* 0-1.5 */
     float chance;         /* 0-100 (percent) */
     float reverse_prob;   /* 0-100 (percent) */
@@ -292,9 +290,9 @@ static const knob_map_entry_t page_knobs[4][8] = {
         {"position",   "Position"},
         {"pitch",      "Pitch Shift"},
         {"feedback",   "Feedback"},
-        {"wet",        "Wet"},
         {"pan_width",  "Pan Width"},
-        {"freeze",     "Freeze"}
+        {"freeze",     "Freeze"},
+        {"mix",        "Dry/Wet"}
     },
     /* Page 1: Randomize */
     {
@@ -321,9 +319,9 @@ static const knob_map_entry_t page_knobs[4][8] = {
     /* Page 3: Advanced */
     {
         {"gain",        "Input"},
-        {"dry",         "Dry"},
         {"mute",        "Mute"},
         {"voice_count", "Voices"},
+        {NULL, NULL},
         {NULL, NULL},
         {NULL, NULL},
         {NULL, NULL},
@@ -331,7 +329,7 @@ static const knob_map_entry_t page_knobs[4][8] = {
     }
 };
 
-static const int page_knob_count[4] = {8, 6, 3, 4};
+static const int page_knob_count[4] = {8, 6, 3, 3};
 
 /* ============================================================================
  * SHARED STATE
@@ -566,8 +564,9 @@ static void v2_process_block(void *instance, int16_t *audio_inout, int frames) {
         float density        = sv_next(&inst->sm_density);
         float drift_val      = sv_next(&inst->sm_drift);
         float feedback       = sv_next(&inst->sm_feedback) * 0.01f;  /* 0-90 -> 0-0.9 */
-        float wet            = sv_next(&inst->sm_wet);
-        float dry            = sv_next(&inst->sm_dry);
+        float mix_pct        = sv_next(&inst->sm_mix);
+        float wet            = mix_pct * 0.01f;  /* 0-1 */
+        float dry            = 1.0f - wet;       /* 1-0 */
         float gain           = sv_next(&inst->sm_gain);
         float envelope_val   = sv_next(&inst->sm_envelope);
 
@@ -807,13 +806,9 @@ static void apply_param_float(granular_instance_t *inst, const char *key, float 
         inst->feedback = clampf(v, 0.0f, 90.0f);
         sv_set(&inst->sm_feedback, inst->feedback, RAMP_SAMPLES);
     }
-    else if (strcmp(key, "wet") == 0) {
-        inst->wet = clampf(v, 0.0f, 1.5f);
-        sv_set(&inst->sm_wet, inst->wet, RAMP_SAMPLES);
-    }
-    else if (strcmp(key, "dry") == 0) {
-        inst->dry = clampf(v, 0.0f, 1.5f);
-        sv_set(&inst->sm_dry, inst->dry, RAMP_SAMPLES);
+    else if (strcmp(key, "mix") == 0) {
+        inst->mix = clampf(v, 0.0f, 100.0f);
+        sv_set(&inst->sm_mix, inst->mix, RAMP_SAMPLES);
     }
     else if (strcmp(key, "gain") == 0) {
         inst->gain = clampf(v, 0.0f, 1.5f);
@@ -912,10 +907,8 @@ static void v2_set_param(void *instance, const char *key, const char *val) {
             apply_param_float(inst, "drift", fv);
         if (json_get_float(val, "feedback", &fv) == 0)
             apply_param_float(inst, "feedback", fv);
-        if (json_get_float(val, "wet", &fv) == 0)
-            apply_param_float(inst, "wet", fv);
-        if (json_get_float(val, "dry", &fv) == 0)
-            apply_param_float(inst, "dry", fv);
+        if (json_get_float(val, "mix", &fv) == 0)
+            apply_param_float(inst, "mix", fv);
         if (json_get_float(val, "gain", &fv) == 0)
             apply_param_float(inst, "gain", fv);
         if (json_get_float(val, "chance", &fv) == 0)
@@ -990,10 +983,8 @@ static int v2_get_param(void *instance, const char *key, char *buf, int buf_len)
         return snprintf(buf, buf_len, "%.2f", inst->drift);
     if (strcmp(key, "feedback") == 0)
         return snprintf(buf, buf_len, "%d", (int)(inst->feedback + 0.5f));
-    if (strcmp(key, "wet") == 0)
-        return snprintf(buf, buf_len, "%.2f", inst->wet);
-    if (strcmp(key, "dry") == 0)
-        return snprintf(buf, buf_len, "%.2f", inst->dry);
+    if (strcmp(key, "mix") == 0)
+        return snprintf(buf, buf_len, "%d", (int)(inst->mix + 0.5f));
     if (strcmp(key, "gain") == 0)
         return snprintf(buf, buf_len, "%.2f", inst->gain);
     if (strcmp(key, "chance") == 0)
@@ -1059,14 +1050,14 @@ static int v2_get_param(void *instance, const char *key, char *buf, int buf_len)
     if (strcmp(key, "state") == 0) {
         return snprintf(buf, buf_len,
             "{\"grain_size\":%.1f,\"position\":%.4f,\"pitch\":%.4f,\"density\":%.4f,"
-            "\"drift\":%.4f,\"feedback\":%.1f,\"wet\":%.4f,\"dry\":%.4f,\"gain\":%.4f,"
+            "\"drift\":%.4f,\"feedback\":%.1f,\"mix\":%.1f,\"gain\":%.4f,"
             "\"chance\":%.1f,\"reverse_prob\":%.1f,\"pan_width\":%.1f,"
             "\"random_vol\":%.1f,\"random_pitch\":%.1f,\"random_length\":%.1f,"
             "\"random_delay\":%.1f,\"envelope\":%.4f,\"freeze\":%d,\"mute\":%d,"
             "\"sync\":%d,\"division\":\"%s\",\"rhythm\":\"%s\","
             "\"voice_count\":%d,\"bpm\":%d}",
             inst->grain_size, inst->position, inst->pitch, inst->density,
-            inst->drift, inst->feedback, inst->wet, inst->dry, inst->gain,
+            inst->drift, inst->feedback, inst->mix, inst->gain,
             inst->chance, inst->reverse_prob, inst->pan_width,
             inst->random_vol, inst->random_pitch, inst->random_length,
             inst->random_delay, inst->envelope,
@@ -1083,7 +1074,7 @@ static int v2_get_param(void *instance, const char *key, char *buf, int buf_len)
                 "\"root\":{"
                     "\"name\":\"Boris Granular\","
                     "\"knobs\":[\"density\",\"grain_size\",\"position\",\"pitch\","
-                        "\"feedback\",\"wet\",\"pan_width\",\"freeze\"],"
+                        "\"feedback\",\"pan_width\",\"freeze\",\"mix\"],"
                     "\"params\":["
                         "{\"level\":\"Granular\",\"label\":\"Granular\"},"
                         "{\"level\":\"Randomize\",\"label\":\"Randomize\"},"
@@ -1094,9 +1085,9 @@ static int v2_get_param(void *instance, const char *key, char *buf, int buf_len)
                 "\"Granular\":{"
                     "\"label\":\"Granular\","
                     "\"knobs\":[\"density\",\"grain_size\",\"position\",\"pitch\","
-                        "\"feedback\",\"wet\",\"pan_width\",\"freeze\"],"
+                        "\"feedback\",\"pan_width\",\"freeze\",\"mix\"],"
                     "\"params\":[\"density\",\"grain_size\",\"position\",\"pitch\","
-                        "\"feedback\",\"wet\",\"pan_width\",\"freeze\","
+                        "\"feedback\",\"mix\",\"pan_width\",\"freeze\","
                         "\"envelope\",\"drift\"]"
                 "},"
                 "\"Randomize\":{"
@@ -1113,8 +1104,8 @@ static int v2_get_param(void *instance, const char *key, char *buf, int buf_len)
                 "},"
                 "\"Advanced\":{"
                     "\"label\":\"Advanced\","
-                    "\"knobs\":[\"gain\",\"dry\",\"mute\",\"voice_count\"],"
-                    "\"params\":[\"gain\",\"dry\",\"mute\",\"voice_count\"]"
+                    "\"knobs\":[\"gain\",\"mute\",\"voice_count\"],"
+                    "\"params\":[\"gain\",\"mute\",\"voice_count\"]"
                 "}"
             "}"
         "}";
@@ -1136,7 +1127,7 @@ static int v2_get_param(void *instance, const char *key, char *buf, int buf_len)
             "{\"key\":\"envelope\",\"name\":\"Envelope\",\"type\":\"float\",\"min\":0,\"max\":1,\"step\":0.01},"
             "{\"key\":\"position\",\"name\":\"Position\",\"type\":\"float\",\"min\":0,\"max\":1,\"step\":0.01},"
             "{\"key\":\"drift\",\"name\":\"Drift\",\"type\":\"float\",\"min\":0,\"max\":1,\"step\":0.01},"
-            "{\"key\":\"wet\",\"name\":\"Wet\",\"type\":\"float\",\"min\":0,\"max\":1.5,\"step\":0.01},"
+            "{\"key\":\"mix\",\"name\":\"Dry/Wet\",\"type\":\"float\",\"min\":0,\"max\":100,\"step\":1},"
             "{\"key\":\"freeze\",\"name\":\"Freeze\",\"type\":\"enum\",\"options\":[\"off\",\"on\"],\"default\":0},"
             "{\"key\":\"random_length\",\"name\":\"Rdm Size\",\"type\":\"float\",\"min\":0,\"max\":100,\"step\":1},"
             "{\"key\":\"random_delay\",\"name\":\"Rdm Delay\",\"type\":\"float\",\"min\":0,\"max\":100,\"step\":1},"
@@ -1150,7 +1141,6 @@ static int v2_get_param(void *instance, const char *key, char *buf, int buf_len)
             "{\"key\":\"division\",\"name\":\"Division\",\"type\":\"enum\",\"options\":[\"1/16\",\"1/8\",\"1/4\",\"1/2\",\"1/1\",\"2/1\",\"4/1\"],\"default\":3},"
             "{\"key\":\"rhythm\",\"name\":\"Rhythm\",\"type\":\"enum\",\"options\":[\"normal\",\"dotted\",\"triplet\"],\"default\":0},"
             "{\"key\":\"gain\",\"name\":\"Input\",\"type\":\"float\",\"min\":0,\"max\":1.5,\"step\":0.01},"
-            "{\"key\":\"dry\",\"name\":\"Dry\",\"type\":\"float\",\"min\":0,\"max\":1.5,\"step\":0.01},"
             "{\"key\":\"mute\",\"name\":\"Mute\",\"type\":\"enum\",\"options\":[\"off\",\"on\"],\"default\":0},"
             "{\"key\":\"voice_count\",\"name\":\"Voices\",\"type\":\"int\",\"min\":1,\"max\":24,\"step\":1}"
             "]");
@@ -1190,15 +1180,14 @@ static void* v2_create_instance(const char *module_dir, const char *config_json)
     inst->grain_size    = 200.0f;
     inst->position      = 0.0f;
     inst->pitch         = 1.0f;
-    inst->density       = 0.52f;
+    inst->density       = 0.5f;
     inst->drift         = 0.0f;
     inst->feedback      = 0.0f;
-    inst->wet           = 1.0f;
-    inst->dry           = 1.0f;
+    inst->mix           = 50.0f;
     inst->gain          = 1.0f;
     inst->chance        = 100.0f;
     inst->reverse_prob  = 0.0f;
-    inst->pan_width     = 0.0f;
+    inst->pan_width     = 50.0f;
     inst->random_vol    = 0.0f;
     inst->random_pitch  = 0.0f;
     inst->random_length = 0.0f;
@@ -1220,8 +1209,7 @@ static void* v2_create_instance(const char *module_dir, const char *config_json)
     sv_init(&inst->sm_density,    inst->density);
     sv_init(&inst->sm_drift,      inst->drift);
     sv_init(&inst->sm_feedback,   inst->feedback);
-    sv_init(&inst->sm_wet,        inst->wet);
-    sv_init(&inst->sm_dry,        inst->dry);
+    sv_init(&inst->sm_mix,        inst->mix);
     sv_init(&inst->sm_gain,       inst->gain);
     sv_init(&inst->sm_envelope,   inst->envelope);
 

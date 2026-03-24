@@ -33,14 +33,14 @@
         "Knob 5: Drift",
         " Random position offset",
         "",
-        "Knob 6: Feedback",
-        " Output fed back to input",
+        "Knob 6: Pan Width",
+        " Stereo spread of grains",
         "",
-        "Knob 7: Wet",
-        " Wet signal level",
+        "Knob 7: Freeze",
+        " Stop recording to buffer",
         "",
-        "Knob 8: Freeze",
-        " Stop recording to buffer"
+        "Knob 8: Dry/Wet",
+        " Mix 0%=dry, 100%=wet"
       ]
     },
     {
@@ -65,7 +65,6 @@
         "Envelope: grain shape",
         " hann/triangle/trapezoid",
         "Gain: input level",
-        "Dry: dry signal level",
         "Voices: 1-24 max grains"
       ]
     },

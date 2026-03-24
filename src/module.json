@@ -2,7 +2,7 @@
   "id": "granular",
   "name": "Boris Granular",
   "abbrev": "GRAN",
-  "version": "0.2.7",
+  "version": "0.3.0",
   "description": "Real-time granular FX with live input capture",
   "author": "Boris (port: charlesvestal)",
   "license": "GPL-3.0",
@@ -16,7 +16,7 @@
       "levels": {
         "root": {
           "name": "Boris Granular",
-          "knobs": ["density", "grain_size", "position", "pitch", "feedback", "wet", "pan_width", "freeze"],
+          "knobs": ["density", "grain_size", "position", "pitch", "feedback", "pan_width", "freeze", "mix"],
           "params": [
             {"level": "Granular", "label": "Granular"},
             {"level": "Randomize", "label": "Randomize"},
@@ -26,16 +26,16 @@
         },
         "Granular": {
           "label": "Granular",
-          "knobs": ["density", "grain_size", "position", "pitch", "feedback", "wet", "pan_width", "freeze"],
+          "knobs": ["density", "grain_size", "position", "pitch", "feedback", "pan_width", "freeze", "mix"],
           "params": [
-            {"key": "density", "label": "Density", "type": "float", "min": 0.04, "max": 1.0, "default": 0.52, "step": 0.01},
+            {"key": "density", "label": "Density", "type": "float", "min": 0.04, "max": 1.0, "default": 0.5, "step": 0.01},
             {"key": "grain_size", "label": "Size", "type": "float", "min": 20.0, "max": 2000.0, "default": 200.0, "step": 1, "unit": "ms"},
             {"key": "position", "label": "Position", "type": "float", "min": 0.0, "max": 1.0, "default": 0.0, "step": 0.01},
             {"key": "pitch", "label": "Pitch Shift", "type": "float", "min": 0.25, "max": 4.0, "default": 1.0, "step": 0.01},
             {"key": "feedback", "label": "Feedback", "type": "float", "min": 0.0, "max": 90.0, "default": 0.0, "step": 1, "unit": "%"},
-            {"key": "wet", "label": "Wet", "type": "float", "min": 0.0, "max": 1.5, "default": 1.0, "step": 0.01},
-            {"key": "pan_width", "label": "Pan Width", "type": "float", "min": 0.0, "max": 100.0, "default": 0.0, "step": 1, "unit": "%"},
+            {"key": "pan_width", "label": "Pan Width", "type": "float", "min": 0.0, "max": 100.0, "default": 50.0, "step": 1, "unit": "%"},
             {"key": "freeze", "label": "Freeze", "type": "enum", "options": ["off", "on"], "default": 0},
+            {"key": "mix", "label": "Dry/Wet", "type": "float", "min": 0.0, "max": 100.0, "default": 50.0, "step": 1, "unit": "%"},
             {"key": "envelope", "label": "Envelope", "type": "float", "min": 0.0, "max": 1.0, "default": 0.0, "step": 0.01},
             {"key": "drift", "label": "Drift", "type": "float", "min": 0.0, "max": 1.0, "default": 0.0, "step": 0.01}
           ]
@@ -63,10 +63,9 @@
         },
         "Advanced": {
           "label": "Advanced",
-          "knobs": ["gain", "dry", "mute", "voice_count"],
+          "knobs": ["gain", "mute", "voice_count"],
           "params": [
             {"key": "gain", "label": "Input", "type": "float", "min": 0.0, "max": 1.5, "default": 1.0, "step": 0.01},
-            {"key": "dry", "label": "Dry", "type": "float", "min": 0.0, "max": 1.5, "default": 1.0, "step": 0.01},
             {"key": "mute", "label": "Mute", "type": "enum", "options": ["off", "on"], "default": 0},
             {"key": "voice_count", "label": "Voices", "type": "int", "min": 1, "max": 24, "default": 24, "step": 1}
           ]
