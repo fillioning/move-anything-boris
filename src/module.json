@@ -2,7 +2,7 @@
   "id": "granular",
   "name": "Boris Granular",
   "abbrev": "GRAN",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Real-time granular FX with live input capture",
   "author": "Boris (port: charlesvestal)",
   "license": "GPL-3.0",
@@ -72,5 +72,29 @@
         }
       }
     }
-  }
+  },
+  "chain_params": [
+    {"key": "density",       "name": "Density",    "type": "float", "min": 0.04, "max": 1,    "step": 0.01},
+    {"key": "grain_size",    "name": "Size",       "type": "float", "min": 20,   "max": 2000, "step": 1},
+    {"key": "position",      "name": "Position",   "type": "float", "min": 0,    "max": 1,    "step": 0.01},
+    {"key": "pitch",         "name": "Pitch Shift","type": "float", "min": 0.25, "max": 4,    "step": 0.01},
+    {"key": "feedback",      "name": "Feedback",   "type": "float", "min": 0,    "max": 90,   "step": 1},
+    {"key": "pan_width",     "name": "Pan Width",  "type": "float", "min": 0,    "max": 100,  "step": 1},
+    {"key": "freeze",        "name": "Freeze",     "type": "enum",  "options": ["off","on"]},
+    {"key": "mix",           "name": "Dry/Wet",    "type": "float", "min": 0,    "max": 100,  "step": 1},
+    {"key": "envelope",      "name": "Envelope",   "type": "float", "min": 0,    "max": 1,    "step": 0.01},
+    {"key": "drift",         "name": "Drift",      "type": "float", "min": 0,    "max": 1,    "step": 0.01},
+    {"key": "random_length", "name": "Rdm Size",   "type": "float", "min": 0,    "max": 100,  "step": 1},
+    {"key": "random_delay",  "name": "Rdm Delay",  "type": "float", "min": 0,    "max": 100,  "step": 1},
+    {"key": "random_pitch",  "name": "Rdm Shift",  "type": "float", "min": 0,    "max": 100,  "step": 1},
+    {"key": "reverse_prob",  "name": "Reverse",    "type": "float", "min": 0,    "max": 100,  "step": 1},
+    {"key": "random_vol",    "name": "Rdm Vol",    "type": "float", "min": 0,    "max": 100,  "step": 1},
+    {"key": "chance",        "name": "Chance",     "type": "float", "min": 0,    "max": 100,  "step": 1},
+    {"key": "sync",          "name": "Sync",       "type": "enum",  "options": ["off","on"]},
+    {"key": "division",      "name": "Division",   "type": "enum",  "options": ["1/16","1/8","1/4","1/2","1/1","2/1","4/1"]},
+    {"key": "rhythm",        "name": "Rhythm",     "type": "enum",  "options": ["normal","dotted","triplet"]},
+    {"key": "gain",          "name": "Input",      "type": "float", "min": 0,    "max": 1.5,  "step": 0.01},
+    {"key": "mute",          "name": "Mute",       "type": "enum",  "options": ["off","on"]},
+    {"key": "voice_count",   "name": "Voices",     "type": "int",   "min": 1,    "max": 24,   "step": 1}
+  ]
 }
